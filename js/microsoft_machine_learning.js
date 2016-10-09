@@ -1,5 +1,6 @@
 
-function microsoft_input(input_text) {
+function microsoft_input(input_text, ms_finish) {
+var output_microsoft = "hello";
 
 	 $(function() {
         var params = {
@@ -17,11 +18,25 @@ function microsoft_input(input_text) {
             // Request body
             data: "{\"documents\": [{\"language\": \"en\", \"id\": \"string\", \"text\": \""+input_text+"\"}]}",
         })
+        
+        
         .done(function(data) {
         	//alert("success");
         	
-        	var output_microsoft = data["documents"][0]["keyPhrases"];
-        	results.innerHTML = output_microsoft;
+        	 output_microsoft = "hello 2";
+        	 output_microsoft = JSON.stringify(data["documents"][0]["keyPhrases"]);
+        	
+        
+        	
+        	//results.innerHTML = output_microsoft;
+        	if (ms_finish != null || ms_finish != undefined){
+        		//alert(output_microsoft);
+        		ms_finish(output_microsoft);
+        	}else {
+        		//alert('no callback');
+        	}
+        	
+        	return output_microsoft;
         	
         	
         })

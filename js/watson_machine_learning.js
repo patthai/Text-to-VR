@@ -1,12 +1,4 @@
-<!DOCTYPE html>
-<html>
-<head>
-   <title>JSSample</title>
-   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
-</head>
-<body>
-
-<script type="text/javascript">
+function watson_input(input_text, watson_finish) {
    $(function() {
        var params = {
            // Request parameters
@@ -50,8 +42,17 @@
        			
        		}
        		
-       		document.write  (toneName);
-       		document.write  (score);
+       		
+       		//results.innerHTML = output_microsoft;
+        	if (watson_finish != null || watson_finish != undefined){
+        		//alert(output_microsoft);
+        		watson_finish(toneName);
+        	}else {
+        		//alert('no callback');
+        	}
+        	
+        	return toneName;
+       		
        		
             
        })
@@ -59,6 +60,4 @@
            alert("error");
        });
    });
-</script>
-</body>
-</html>
+}
