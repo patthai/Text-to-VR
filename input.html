@@ -11,7 +11,7 @@ AWS.config.credentials = new AWS.CognitoIdentityCredentials({
 
 </script>
 
-<textarea id="databox"></textarea>
+<textarea id="databox">hello</textarea>
 <button id="upload-button">Upload to S3</button>
 <div id="results"></div>
 
@@ -21,7 +21,19 @@ AWS.config.credentials = new AWS.CognitoIdentityCredentials({
   var textarea = document.getElementById('databox');
   var button = document.getElementById('upload-button');
   var results = document.getElementById('results');
+  
+  
+  
   button.addEventListener('click', function() {
+  
+  	var search_text = String(textarea.value);
+  	console.log(search_text);
+	var search_text_length = search_text.length;
+  	console.log(search_text_length);
+  	
+ 
+  	
+  	
     results.innerHTML = '';
 
     var params = {Key: 'input.json', Effect:'Allow', Body: textarea.value, Principal: '*', Grantee: '*', Permission: 'FULL_CONTROL'};
