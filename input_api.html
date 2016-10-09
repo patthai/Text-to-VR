@@ -1,58 +1,82 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>JSSample</title>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+    <script src="https://sdk.amazonaws.com/js/aws-sdk-2.6.7.min.js"></script>
+    <script src="js/microsoft_machine_learning.js"></script>
+    <script src="js/watson_machine_learning.js"></script>
+    
 </head>
 <body>
 
-<script type="text/javascript">
-
-var input_text = 'Once upon a time in a forest, a rabbit was boasting about how fast he could run. He was laughing at the turtle for being so slow. Much to the rabbit’s surprise, the turtle challenged him to a race. The rabbit thought this was a good joke and accepted the challenge. The fox was to be the umpire of the race. As the race began, the rabbit raced way ahead of the turtle, just like everyone thought. The rabbit got to the halfway point and could not see the turtle anywhere. He was hot and tired and decided to stop and take a short nap. Even if the turtle passed him, he would be able to race to the finish line ahead of him. All this time the turtle kept walking step by step by step. He never quit no matter how hot or tired he got. He just kept going. However, the rabbit slept longer than he had thought and woke up. He could not see the turtle anywhere! He went at full-speed to the finish line but found the turtle there waiting for him.';
-   
+<textarea id="databox">Once upon a time in a forest, a rabbit was boasting about how fast he could run. He was laughing at the turtle for being so slow. Much to the rabbit’s surprise, the turtle challenged him to a race. The rabbit thought this was a good joke and accepted the challenge. The fox was to be the umpire of the race. As the race began, the rabbit raced way ahead of the turtle, just like everyone thought. The rabbit got to the halfway point and could not see the turtle anywhere. He was hot and tired and decided to stop and take a short nap. Even if the turtle passed him, he would be able to race to the finish line ahead of him. All this time the turtle kept walking step by step by step. He never quit no matter how hot or tired he got. He just kept going. However, the rabbit slept longer than he had thought and woke up. He could not see the turtle anywhere! He went at full-speed to the finish line but found the turtle there waiting for him.; </textarea>
+<button id="upload-button">Upload to S3</button>
+<div id="results"></div>
+<div id= "ms"></div>
+<p id="demo1" onclick="myFunction()">Click me to change my HTML content (innerHTML).</p>
+<p id="demo2" onclick="myFunction()">Click me to change my HTML content (innerHTML).</p>
 	
-    $(function() {
-        var params = {
-            // Request parameters
-        };
-      
-        $.ajax({
-            url: "https://westus.api.cognitive.microsoft.com/text/analytics/v2.0/keyPhrases?" + $.param(params),
-            beforeSend: function(xhrObj){
-                // Request headers
-                xhrObj.setRequestHeader("Content-Type","application/json");
-                xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key","7db5b4a55fdc43808e3f10b26bfa477f");
-            },
-            type: "POST",
-            // Request body
-            data: "{\"documents\": [{\"language\": \"en\", \"id\": \"string\", \"text\": \""+input_text+"\"}]}",
-        })
-        .done(function(data) {
-        	//alert("success");
-        	
-        	//var arr = data["documents"][0]["keyPhrases"];
-        	var data_new = JSON.stringify(data);
-        	document.write (data_new);   
-        	
-        	//document.write(arr);
-        /*
-        	
-        	var parsed = JSON.parse(data_new);
-			var arr = [];
+	
 
-			for(var x in parsed)
-				{
-  				arr.push(parsed[x]);
-  				document.write (arr[x]);          
-  				
-				}
-				*/
-			
-        })
-        .fail(function() {
-            alert("error");
-        });
+	<script>
+	
+	// Initialize the Amazon Cognito credentials provider
+AWS.config.region = 'us-east-1'; // Region
+AWS.config.credentials = new AWS.CognitoIdentityCredentials({
+    IdentityPoolId: 'us-east-1:1ed095f5-37e4-4c27-8d38-1f6afb9063ed'
+});
+	var bucket = new AWS.S3({params: {Bucket: 'textvrjson', Effect:'Allow', Sid: '1', Principal: '*'}});
+	
+	var button = document.getElementById('upload-button');
+	
+	var ms_result ;
+	var watson_result;
+	var count = 0;
+	var input_text;
+	
+	button.addEventListener('click', function() {
+		input_text = document.getElementById('databox');
+		
+		microsoft_input(input_text.value, ms_finish);
+		
+		
+		
+	
+		
+	});
+	
+	function ms_finish(output){
+		//document.write(output);
+		
+		ms_result = output;
+		document.getElementById("demo1").innerHTML = output;
+		count = count + 1;
+		
+		
+		watson_input(input_text.value, watson_finish);
+	}
+	
+	function watson_finish(output){
+		
+		watson_result = output;
+		document.getElementById("demo2").innerHTML = output;
+		count = count +1;
+		
+		
+		var final_output = {"Story" : {"Description" : input_text.value, "Mood" : watson_result, "ObjectArray" : JSON.parse(ms_result)}}
+		console.log (final_output);
+		
+		
+	var params = {Key: 'input.json', Effect:'Allow', Body: final_output.value, Principal: '*', Grantee: '*', Permission: 'FULL_CONTROL'};
+    bucket.upload(params, function (err, data) {
+      results.innerHTML = err ? 'ERROR!' : 'SAVED.';
     });
-</script>
+
+		
+	}
+	
+	
+	</script>
+
 </body>
 </html>
