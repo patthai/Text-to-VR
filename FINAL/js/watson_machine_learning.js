@@ -12,7 +12,7 @@ function watson_input(input_text, watson_finish) {
            },
            type: "POST",
            // Request body
-           data: "i am feeling great about this",
+           data: input_text,
        })
        .done(function(data) {
        
