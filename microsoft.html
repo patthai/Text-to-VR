@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>JSSample</title>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
 </head>
 <body>
 
 <script type="text/javascript">
+
+	var input_text = 'Once upon a time in a forest, a rabbit was boasting about how fast he could run. He was laughing at the turtle for being so slow. Much to the rabbit’s surprise, the turtle challenged him to a race. The rabbit thought this was a good joke and accepted the challenge. The fox was to be the umpire of the race. As the race began, the rabbit raced way ahead of the turtle, just like everyone thought. The rabbit got to the halfway point and could not see the turtle anywhere. He was hot and tired and decided to stop and take a short nap. Even if the turtle passed him, he would be able to race to the finish line ahead of him. All this time the turtle kept walking step by step by step. He never quit no matter how hot or tired he got. He just kept going. However, the rabbit slept longer than he had thought and woke up. He could not see the turtle anywhere! He went at full-speed to the finish line but found the turtle there waiting for him.';
     $(function() {
         var params = {
             // Request parameters
@@ -21,29 +22,14 @@
             },
             type: "POST",
             // Request body
-            data: "{\"documents\": [{\"language\": \"en\", \"id\": \"string\", \"text\": \""+"Once upon a time in a forest, a rabbit was boasting about how fast he could run. He was laughing at the turtle for being so slow. Much to the rabbit’s surprise, the turtle challenged him to a race. The rabbit thought this was a good joke and accepted the challenge. The fox was to be the umpire of the race. As the race began, the rabbit raced way ahead of the turtle, just like everyone thought. The rabbit got to the halfway point and could not see the turtle anywhere. He was hot and tired and decided to stop and take a short nap. Even if the turtle passed him, he would be able to race to the finish line ahead of him. All this time the turtle kept walking step by step by step. He never quit no matter how hot or tired he got. He just kept going. However, the rabbit slept longer than he had thought and woke up. He could not see the turtle anywhere! He went at full-speed to the finish line but found the turtle there waiting for him.'"+"\"}]}",
+            data: "{\"documents\": [{\"language\": \"en\", \"id\": \"string\", \"text\": \""+input_text+"\"}]}",
         })
         .done(function(data) {
         	alert("success");
         	
         	var arr = data["documents"][0]["keyPhrases"];
-        	var data_new = JSON.stringify(data);
-        	document.write (data_new);   
+        	document.write (arr);   
         	
-        	//document.write(arr);
-        /*
-        	
-        	var parsed = JSON.parse(data_new);
-			var arr = [];
-
-			for(var x in parsed)
-				{
-  				arr.push(parsed[x]);
-  				document.write (arr[x]);          
-  				
-				}
-				*/
-			
         })
         .fail(function() {
             alert("error");
