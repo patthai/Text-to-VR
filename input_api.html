@@ -67,11 +67,18 @@ AWS.config.credentials = new AWS.CognitoIdentityCredentials({
 		console.log (final_output);
 		
 		
-	var params = {Key: 'input.json', Effect:'Allow', Body: final_output.value, Principal: '*', Grantee: '*', Permission: 'FULL_CONTROL'};
+	var params = {Key: 'input.json', Effect:'Allow', Body:JSON.stringify(final_output), Principal: '*', Grantee: '*', Permission: 'FULL_CONTROL'};
+    //bucket.upload(params, function (err, data) {
+    //  results.innerHTML = err ? 'ERROR!' : 'SAVED.';
+    //        console.log(data);
+    //  console.log(err);
+    //});
+
+    //var params = {Key: 'input.json', Effect:'Allow', Body: input_text.value, Principal: '*', Grantee: '*', Permission: 'FULL_CONTROL'};
     bucket.upload(params, function (err, data) {
       results.innerHTML = err ? 'ERROR!' : 'SAVED.';
-    });
 
+    });
 		
 	}
 	

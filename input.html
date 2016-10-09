@@ -39,6 +39,8 @@ AWS.config.credentials = new AWS.CognitoIdentityCredentials({
     var params = {Key: 'input.json', Effect:'Allow', Body: textarea.value, Principal: '*', Grantee: '*', Permission: 'FULL_CONTROL'};
     bucket.upload(params, function (err, data) {
       results.innerHTML = err ? 'ERROR!' : 'SAVED.';
+      console.log(data);
+      console.log(err);
     });
   }, false);
 </script>
