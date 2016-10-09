@@ -1,0 +1,32 @@
+<script src="https://sdk.amazonaws.com/js/aws-sdk-2.6.7.min.js"></script>
+<script type="text/javascript">
+
+
+// Initialize the Amazon Cognito credentials provider
+AWS.config.region = 'us-east-1'; // Region
+AWS.config.credentials = new AWS.CognitoIdentityCredentials({
+    IdentityPoolId: 'us-east-1:1ed095f5-37e4-4c27-8d38-1f6afb9063ed'
+});
+
+
+</script>
+
+<textarea id="databox"></textarea>
+<button id="upload-button">Upload to S3</button>
+<div id="results"></div>
+
+<script type="text/javascript">
+  var bucket = new AWS.S3({params: {Bucket: 'textvrjson', Effect:'Allow', Sid: '1', Principal: '*'}});
+
+  var textarea = document.getElementById('databox');
+  var button = document.getElementById('upload-button');
+  var results = document.getElementById('results');
+  button.addEventListener('click', function() {
+    results.innerHTML = '';
+
+    var params = {Key: 'input.json', Effect:'Allow', Body: textarea.value, Principal: '*', Grantee: '*', Permission: 'FULL_CONTROL'};
+    bucket.upload(params, function (err, data) {
+      results.innerHTML = err ? 'ERROR!' : 'SAVED.';
+    });
+  }, false);
+</script>
